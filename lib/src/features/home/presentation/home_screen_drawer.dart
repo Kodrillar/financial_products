@@ -1,17 +1,33 @@
 import 'package:financial_products/src/core/extensions/build_context_ex.dart';
 import 'package:financial_products/src/core/utils/app_spacer.dart';
 import 'package:financial_products/src/core/utils/contants.dart';
+import 'package:financial_products/src/core/widgets/app_dialogs.dart';
+import 'package:financial_products/src/features/auth/data/repository/auth.dart';
+import 'package:financial_products/src/features/auth/data/repository/local_auth.dart';
+import 'package:financial_products/src/features/auth/domain/model/app_user.dart';
 import 'package:financial_products/src/features/home/presentation/user_avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:screendapt/screendapt.dart';
 
-class HomeScreenDrawer extends StatelessWidget {
+class HomeScreenDrawer extends ConsumerWidget {
   const HomeScreenDrawer({
     super.key,
   });
 
+  Future<void> _logOut({
+    required BuildContext context,
+    required WidgetRef ref,
+  }) async {
+    final bool canLogout =
+        await AppDialogs.showLogOutConfirmationDialog(context) ?? false;
+
+    if (canLogout) ref.read(authRepositoryProvider).logOut();
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AppUser? appUser = ref.watch(localAuthStateChangesProvider).value;
     return Drawer(
       backgroundColor: context.appTheme.foreground,
       child: SafeArea(
@@ -26,15 +42,15 @@ class HomeScreenDrawer extends StatelessWidget {
                 children: [
                   const UserAvatar(),
                   Spacers.h20,
-                  const SText(
-                    'David',
+                  SText(
+                    appUser != null ? appUser.firstName : '--',
                     maxLines: 2,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18, overflow: TextOverflow.ellipsis),
                   ),
                   Spacers.h2,
                   SText(
-                    'davidipadeola@kodrillar.com',
+                    appUser != null ? appUser.email : '--',
                     maxLines: 2,
                     maxFontSize: 16,
                     style: TextStyle(
@@ -51,10 +67,10 @@ class HomeScreenDrawer extends StatelessWidget {
                 child: Column(
                   children: [
                     DrawerTile(
-                      onTap: () {},
+                      onTap: () => _logOut(context: context, ref: ref),
                       title: 'Log out',
                       icon: Icons.logout_outlined,
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -85,7 +101,7 @@ class DrawerTile extends StatelessWidget {
       child: InkWell(
         overlayColor:
             WidgetStatePropertyAll(context.appTheme.primary.withOpacity(.08)),
-        onTap: () {},
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: kBodyPadding,

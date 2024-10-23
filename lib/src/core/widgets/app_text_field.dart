@@ -15,6 +15,7 @@ class AppTextField extends StatelessWidget {
     this.onFieldSubmitted,
     this.obscureText = false,
     this.inputFormatters,
+    this.autofocus = false,
   });
 
   final String labelText;
@@ -27,6 +28,7 @@ class AppTextField extends StatelessWidget {
   final void Function(String)? onFieldSubmitted;
   final TextInputAction? textInputAction;
   final List<TextInputFormatter>? inputFormatters;
+  final bool autofocus;
 
   void _unfocusOnTextField() => FocusManager.instance.primaryFocus?.unfocus();
 
@@ -61,6 +63,7 @@ class AppTextField extends StatelessWidget {
 
     return TextFormField(
       style: textStyle,
+      autofocus: autofocus,
       enabled: enabled,
       textInputAction: textInputAction,
       inputFormatters: inputFormatters,

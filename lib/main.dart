@@ -13,8 +13,6 @@ void main() {
   }
 
   runApp(
-    const ProviderScope(
-      child: FinancialProductsApp(),
-    ),
+    const ProviderScope(child: AppIntializer()),
   );
 }

@@ -5,9 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:screendapt/screendapt.dart';
 
 class HomeScreenAppBar extends StatelessWidget {
-  const HomeScreenAppBar({super.key, required this.onTapOfUserAvatar});
+  const HomeScreenAppBar({
+    super.key,
+    required this.onTapOfUserAvatar,
+    required this.userName,
+  });
 
   final VoidCallback onTapOfUserAvatar;
+  final String? userName;
 
   @override
   Widget build(BuildContext context) {
@@ -18,22 +23,26 @@ class HomeScreenAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // User Greeting
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SText('Welcome,'),
-              Spacers.h2,
-              SText(
-                'David',
-                style: TextStyle(
-                  color: context.appTheme.primary,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SText('Welcome,'),
+                Spacers.h2,
+                SText(
+                  userName ?? '--',
+                  maxLines: 1,
+                  style: TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    color: context.appTheme.primary,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-
+          Spacers.w20,
           UserAvatar(onTapOfUserAvatar: onTapOfUserAvatar)
         ],
       ),
