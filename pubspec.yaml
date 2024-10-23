@@ -25,6 +25,8 @@ dependencies:
 
   # Code generation for providers
   riverpod_annotation: ^2.6.1
+
+  # Logging
   logger: ^2.4.0
 
 dev_dependencies:

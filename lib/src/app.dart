@@ -18,6 +18,7 @@ class FinancialProductsApp extends ConsumerWidget {
         designSize: const Size(375, 812),
         builder: (context, _) {
           return MaterialApp(
+            navigatorKey: AppRouter.key,
             title: 'Financial Products',
             debugShowCheckedModeBanner: false,
             theme: AppThemeData.getThemeData(context),

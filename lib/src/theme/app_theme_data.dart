@@ -10,5 +10,8 @@ class AppThemeData {
         fontFamily: AppFonts.inter,
         useMaterial3: true,
         scaffoldBackgroundColor: context.appTheme.background,
+        textTheme: TextTheme(
+          bodyMedium: TextStyle(color: context.appTheme.text),
+        ),
       );
 }
