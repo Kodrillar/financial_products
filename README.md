@@ -14,7 +14,7 @@ samples, guidance on mobile development, and a full API reference.
 
 The project uses Flutter Version Manager (FVM) to access its SDK. Ensure FVM is set up on your machine.
 
-NB: This setup is optional, you can always use the default SDK on your machine to run and build the project.
+NB: This setup is optional, you can always use the default SDK on your machine to run and build the project. If you're running the project on VSCode, delete the `.vscode` folder or remove the `dart.flutterSdkPath` configuration in the `.vscode/settings.json` file. This will allow VSCode to fetch your default SDK path from your machine.
 
 ## Project structure
 
