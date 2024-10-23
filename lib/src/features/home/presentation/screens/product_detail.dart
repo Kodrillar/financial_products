@@ -1,12 +1,18 @@
 import 'package:financial_products/src/core/extensions/build_context_ex.dart';
 import 'package:financial_products/src/core/utils/app_spacer.dart';
-import 'package:financial_products/src/core/widgets/app_back_button.dart';
+import 'package:financial_products/src/core/utils/date_formatter.dart';
+import 'package:financial_products/src/core/utils/number_formatter.dart';
+import 'package:financial_products/src/features/home/domain/model/product.dart';
+import 'package:financial_products/src/features/home/domain/model/sub_product.dart';
 import 'package:financial_products/src/features/home/presentation/product_card.dart';
+import 'package:financial_products/src/features/home/presentation/product_detail_screen_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:screendapt/screendapt.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({super.key});
+  const ProductDetailScreen({super.key, required this.product});
+
+  final Product product;
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -36,6 +42,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Product product = widget.product;
     return Scaffold(
       backgroundColor: context.appTheme.foreground,
       body: SafeArea(
@@ -44,7 +51,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           children: [
             Column(
               children: [
-                const ProductDetailScreenAppBar(),
+                ProductDetailScreenAppBar(title: widget.product.name),
                 Spacers.h5,
                 Expanded(
                   child: SingleChildScrollView(
@@ -52,34 +59,43 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SText(
-                            'The Product is a short to medium term shariah-compliant investment based on the principle of Mudaraba (Partnership). It invests in carefully selected Naira and Dollar Shariah compliant instruments for the benefits or investors.',
-                            style: TextStyle(
+                          SText(
+                            product.description,
+                            style: const TextStyle(
                               fontWeight: FontWeight.w400,
                               // color: context.appTheme.text,
                             ),
                           ),
-                          const ProductDetailSection(
-                            title: 'Minimum Fund',
-                            content: 'N50,000',
-                          ),
-                          const ProductDetailSection(
-                            title: 'Minimum Withdrawal',
-                            content: 'N50,000',
-                          ),
-                          const ProductDetailSection(
-                            title: 'Features',
-                            content:
-                                'Investments are based on Shariah principles. The minimum investments amount is N100,000.00 and \$2000. Competitive Return on Investment. The minimum investment Note is available in 90 days to 5 years tenor. Full or part liquidation is allowed subject to charge of 25% of accrued profit. Returns are distributed based on the profit made at maturity of investment. Available in naira and US Dollar. Expected profit ranges from 9.00% - 12.00% for Naira and 4.00% -7.00% based on amount and tenure of the investment.',
-                          ),
-                          LastUpdatedDate(dateTime: DateTime.now()),
+                          if (widget.product.minFund != null)
+                            ProductDetailSection(
+                              title: 'Minimum Fund',
+                              content: NumberFormatter.formatAmount(
+                                amount: product.minFund!,
+                                currency: product.currency,
+                              ),
+                            ),
+                          if (widget.product.minWithdrawal != null)
+                            ProductDetailSection(
+                              title: 'Minimum Withdrawal',
+                              content: NumberFormatter.formatAmount(
+                                amount: product.minWithdrawal!,
+                                currency: product.currency,
+                              ),
+                            ),
+                          if (widget.product.features != null)
+                            ProductDetailSection(
+                              title: 'Features',
+                              content: product.features!,
+                            ),
+                          LastUpdatedDate(dateTime: product.lastUpdated),
                           Spacers.h20,
                         ],
                       ),
                     ),
                   ),
                 ),
-                ViewSubProductButton(onTap: _showDraggableSheet)
+                if (product.subProducts.isNotEmpty)
+                  ViewSubProductButton(onTap: _showDraggableSheet)
               ],
             ),
             Align(
@@ -90,6 +106,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 maxChildSize: _maxDraggableSheetSize,
                 initialChildSize: _minDraggableSheetSize,
                 builder: (_, controller) => SubProductCardsView(
+                  products: product.subProducts,
                   scrollController: controller,
                   onClose: _hideDraggableSheet,
                 ),
@@ -107,10 +124,13 @@ class SubProductCardsView extends StatelessWidget {
     super.key,
     required this.scrollController,
     required this.onClose,
+    required this.products,
   });
 
   final ScrollController scrollController;
   final VoidCallback onClose;
+
+  final List<SubProduct> products;
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +157,7 @@ class SubProductCardsView extends StatelessWidget {
                         child: TextButton(
                           onPressed: onClose,
                           child: SText(
-                            'Close',
+                            'Dismiss',
                             maxFontSize: 16,
                             style: TextStyle(
                               color: context.appTheme.primary,
@@ -146,10 +166,25 @@ class SubProductCardsView extends StatelessWidget {
                         ),
                       ),
                       Spacers.h15,
-                      //Dummy data
-                      for (int i = 0; i < 10; i++) ...[
-                        const ProductCard(),
-                        Spacers.h15
+                      for (SubProduct product in products) ...[
+                        ProductCard(
+                          product: Product(
+                            id: product.id,
+                            name: product.title,
+                            currency: product.currency,
+                            description: product.description,
+                            lastUpdated: product.lastUpdated,
+                            features: product.features,
+                            minFund: (product.minFund != null)
+                                ? int.tryParse(product.minFund!)
+                                : null,
+                            minWithdrawal: (product.minWithdrawal != null)
+                                ? int.tryParse(product.minWithdrawal!)
+                                : null,
+                            subProducts: [],
+                          ),
+                        ),
+                        Spacers.h15,
                       ]
                     ],
                   ),
@@ -183,7 +218,7 @@ class ViewSubProductButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: SContainer(
             child: SText(
-              'See related products',
+              'See Sub-products',
               style: TextStyle(color: context.appTheme.light),
             ),
           ),
@@ -205,7 +240,7 @@ class LastUpdatedDate extends StatelessWidget {
       children: [
         Spacers.h20,
         SText(
-          'Last updated: ${dateTime.toString()}',
+          'Last updated: ${DateFormatter.formatDate(dateTime)}',
           style: TextStyle(
             fontStyle: FontStyle.italic,
             fontSize: 12,
@@ -218,8 +253,11 @@ class LastUpdatedDate extends StatelessWidget {
 }
 
 class ProductDetailSection extends StatelessWidget {
-  const ProductDetailSection(
-      {super.key, required this.title, required this.content});
+  const ProductDetailSection({
+    super.key,
+    required this.title,
+    required this.content,
+  });
 
   final String title;
   final String content;
@@ -250,36 +288,6 @@ class ProductDetailSection extends StatelessWidget {
           style: const TextStyle(fontSize: 14),
         ),
       ],
-    );
-  }
-}
-
-class ProductDetailScreenAppBar extends StatelessWidget {
-  const ProductDetailScreenAppBar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SContainer(
-      padding: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 15, bottom: 15, right: 20),
-        child: Row(
-          children: [
-            const AppBackButton(),
-            Spacers.w5,
-            Expanded(
-              child: SText(
-                'Discretionary Money Market Investment',
-                maxLines: 1,
-                style: TextStyle(
-                  color: context.appTheme.primary,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

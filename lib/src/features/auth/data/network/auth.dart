@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:financial_products/src/core/network/api_urls.dart';
 import 'package:financial_products/src/core/utils/data_layer_processor.dart';
-import 'package:financial_products/src/core/utils/logging/app_logger.dart';
 import 'package:financial_products/src/features/auth/domain/model/app_user.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';

@@ -3,6 +3,7 @@ import 'package:financial_products/src/features/auth/data/repository/local_auth.
 import 'package:financial_products/src/features/auth/domain/model/app_user.dart';
 import 'package:financial_products/src/features/auth/presentation/screens/email_verification.dart';
 import 'package:financial_products/src/features/auth/presentation/screens/login.dart';
+import 'package:financial_products/src/features/home/domain/model/product.dart';
 import 'package:financial_products/src/features/home/presentation/screens/home.dart';
 import 'package:financial_products/src/features/home/presentation/screens/product_detail.dart';
 import 'package:financial_products/src/routing/route_error_page.dart';
@@ -51,8 +52,9 @@ class AppRouter {
           builder: (_) =>
               EmailVerificationScreen(appUser: settings.arguments as AppUser),
         ),
-      AppRoutes.productDetail =>
-        MaterialPageRoute(builder: (_) => const ProductDetailScreen()),
+      AppRoutes.productDetail => MaterialPageRoute(
+          builder: (_) =>
+              ProductDetailScreen(product: settings.arguments as Product)),
 
       //Fallback screen if route settings name is unknown
       _ => MaterialPageRoute(builder: (_) => const RouteErrorPage())

@@ -1,13 +1,15 @@
 import 'package:financial_products/src/core/extensions/build_context_ex.dart';
 import 'package:financial_products/src/core/utils/app_spacer.dart';
+import 'package:financial_products/src/core/utils/number_formatter.dart';
+import 'package:financial_products/src/features/home/domain/model/product.dart';
 import 'package:financial_products/src/routing/app_route.dart';
 import 'package:flutter/material.dart';
 import 'package:screendapt/screendapt.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({
-    super.key,
-  });
+  const ProductCard({super.key, required this.product});
+
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,8 @@ class ProductCard extends StatelessWidget {
       color: context.appTheme.foreground,
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
-        onTap: () => AppRouter.navigator.pushNamed(AppRoutes.productDetail),
+        onTap: () => AppRouter.navigator
+            .pushNamed(AppRoutes.productDetail, arguments: product),
         child: Padding(
           padding: const EdgeInsets.all(18),
           child: Column(
@@ -27,7 +30,7 @@ class ProductCard extends StatelessWidget {
                   //Product Name
                   Expanded(
                     child: SText(
-                      'Discretionary Money Market Investment',
+                      product.name,
                       maxLines: 2,
                       maxFontSize: 16,
                       style: TextStyle(
@@ -40,24 +43,28 @@ class ProductCard extends StatelessWidget {
                   ),
                   Spacers.w10,
                   //Product Minimum Value
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: SText(
-                      'N405,000',
-                      maxFontSize: 17,
-                      style: TextStyle(
-                        color: context.appTheme.primary,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
+                  if (product.minFund != null)
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: SText(
+                        NumberFormatter.formatAmount(
+                          amount: product.minFund!,
+                          currency: product.currency,
+                        ),
+                        maxFontSize: 17,
+                        style: TextStyle(
+                          color: context.appTheme.primary,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
-                  ),
                 ],
               ),
               Spacers.customH(8),
               //Product Minimum Description
               SText(
-                'Easy entry and exit. Withdrawal within 24-48 hours. Diversified portfolio.Online access to monitor the investment. Minimum investment amount is N50,000. Investment is fixed and reviewed periodically. Investment is subject to 10% withholding tax. Interest rate is currently 9.00%. Investors can liquidate their investment at any time without penalty',
+                product.description,
                 maxLines: 3,
                 maxFontSize: 15,
                 style: TextStyle(
