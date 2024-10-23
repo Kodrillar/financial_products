@@ -2,7 +2,7 @@
 
 A cross-platform mobile application that fetches & displays [Norrenberger](https://www.norrenberger.com) financial investment products.
 
-<img width="200" alt="Login" src="https://github.com/user-attachments/assets/db761492-936a-4f63-a32c-bb7227bea26b"> <img width="200" alt="Email verification" src="https://github.com/user-attachments/assets/0136d1d5-9631-4742-8f54-e815faf8231a"> <img width="200" alt="Home" src="https://github.com/user-attachments/assets/a4db195f-8199-480f-beff-b98bcabe84a5"> <img width="200" alt="Home Drawer" src="https://github.com/user-attachments/assets/da9bf20a-778d-4fea-8799-e2771446eb4c"> <img width="200" alt="Product detail" src="https://github.com/user-attachments/assets/c5401659-761e-4d53-9c44-b07a2e303e24"> <img width="200" alt="Sub product" src="https://github.com/user-attachments/assets/8b2c200f-27b9-455a-908f-eae8102477f8">
+<img width="200" alt="Login" src="https://github.com/user-attachments/assets/db761492-936a-4f63-a32c-bb7227bea26b"> <img width="200" alt="Email verification" src="https://github.com/user-attachments/assets/0136d1d5-9631-4742-8f54-e815faf8231a"> <img width="200" alt="Home" src="https://github.com/user-attachments/assets/c76f8fb8-c4bb-4fe2-9399-38921e3c9ee9"> <img width="200" alt="Home Drawer" src="https://github.com/user-attachments/assets/da9bf20a-778d-4fea-8799-e2771446eb4c"> <img width="200" alt="Product detail" src="https://github.com/user-attachments/assets/c5401659-761e-4d53-9c44-b07a2e303e24"> <img width="200" alt="Sub product" src="https://github.com/user-attachments/assets/8b2c200f-27b9-455a-908f-eae8102477f8">
 
 ## Getting Started
 
